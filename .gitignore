@@ -1,3 +1,6 @@
+.gitconfig
+.viminfo
+*.zip
 unpv13e/
 *.exe
 test.*

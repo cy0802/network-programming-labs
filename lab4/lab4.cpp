@@ -11,12 +11,12 @@
 using namespace std;
 
 // public server
-// const char* host = "140.113.213.213";
-// const int port = 10314;
+const char* host = "140.113.213.213";
+const int port = 10314;
 
 // submit
-const char* host = "172.21.0.4";
-const int port = 10001;
+// const char* host = "172.21.0.4";
+// const int port = 10001;
 char buffer[20000];
 int sockfd = 0;
 struct sockaddr_in  server;

@@ -84,7 +84,8 @@ void rcv(bool discard){
     }
     bzero(&buffer, sizeof(buffer));
     int n = read(sockfd, buffer, sizeof(buffer));
-    cout << "received: ======================\n" << buffer << "\n================================\n\n";
+    if(n < 0) cout << "error when receiving data ==============================================\n\n" << endl;
+    else cout << "received: ======================\n" << buffer << "\n================================\n\n";
 }
 int _match(char* ch){
     if(*ch >= '0' && *ch <= '9' && *(ch+1) == ':'){
@@ -114,7 +115,7 @@ void dfs(int _from, string route){ // right, left, up, down
         if(i == _from) continue;
         if(map[direction[i][0]][direction[i][1]] == 'E'){
             found = true;
-            query(go[i]); rcv(false); rcv(false); rcv(false);
+            query(go[i]); rcv(false); rcv(false); rcv(false); rcv(false); rcv(false);
             int tmp; cin >> tmp;
             return;
         }
@@ -128,3 +129,4 @@ void dfs(int _from, string route){ // right, left, up, down
     }
     
 } // current position {3, 5}
+

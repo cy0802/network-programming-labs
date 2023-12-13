@@ -33,16 +33,10 @@ int sockfd;
 struct sockaddr_un cliaddr, servaddr;
 
 int main(){
-    cout << "Hello, world!\n";
     if((sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {errquit("socket");}
     else cout << "create socket sucessfully\n";
     bzero(&cliaddr, sizeof(cliaddr));
     bzero(&servaddr, sizeof(servaddr));
-    // cliaddr.sun_family = AF_LOCAL;
-    // strcpy(cliaddr.sun_path, tmpnam(NULL));
-    // cout << cliaddr.sun_path << endl;
-    // if((bind(sockfd, (struct sockaddr*)&cliaddr, sizeof(cliaddr))) < 0) {errquit("bind");}
-    // else cout << "bind successfully\n";
     servaddr.sun_family = AF_LOCAL;
     strncpy(servaddr.sun_path, socketPath, sizeof(socketPath) - 1);
 
@@ -54,19 +48,11 @@ int main(){
     if((send(sockfd, buffer, strlen(buffer), 0)) < 0) errquit("send");
     bzero(&buffer, sizeof(buffer));
     if((recv(sockfd, buffer, MAXLINE, 0)) < 0) errquit("recv");
-    // cout << buffer << endl;
     memcpy(map_, buffer + 4, 30*30);
-    printMap();
 
-
-    // memset(map_, '.', sizeof(map_));
-    // srand(time(NULL));
-    // map_[rand() % N][rand() % N] = 'Q';
-    // int queenCnt = N;
     for(int row = 0; row < N; row++){
         for(int col = 0; col < N; col++){
             if(map_[row][col] == 'Q'){
-                // queenCnt--;
                 visitedCol[col] = true;
                 visitedRow[row] = true;
                 visitedDiagonal[col - row + N - 1] = true;
@@ -75,7 +61,7 @@ int main(){
         }
     }
 
-    nQueen(25);
+    nQueen(27);
     cout << "===================================================================\n";
     for(int row = 0; row < N; row++){
         for(int col = 0; col < N; col++){
@@ -91,21 +77,20 @@ int main(){
         if(send(sockfd, buffer, sizeof(buffer), 0) < 0) errquit("send");
         bzero(&buffer, sizeof(buffer));
         if(recv(sockfd, buffer, sizeof(buffer), 0) < 0) errquit("recv");
-        // cout << it->first << " " << it->second << "\n";
-        // cout << buffer << endl;
     }
     bzero(&buffer, sizeof(buffer));
     sprintf(buffer, "C");
     if(send(sockfd, buffer, sizeof(buffer), 0) < 0) errquit("send");
     bzero(&buffer, sizeof(buffer));
     if(recv(sockfd, buffer, sizeof(buffer), 0) < 0) errquit("recv");
-    // cout << endl;
+    cout << buffer << endl;
     
     close(sockfd);
     return 0;
 }
 
 void nQueen(int n){
+    // printMap();
     if(n == 0){
         memcpy(result, map_, sizeof(map_));
         resultQueens = queens;
@@ -133,6 +118,7 @@ void nQueen(int n){
             visitedDiagonal[col - row + N - 1] = false;
             visitedDiagonal2[row + col] = false;
         }
+        if(!visitedRow[row]) return;
     }
 }
 void printVisitedStatus(){
